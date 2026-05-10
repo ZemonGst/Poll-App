@@ -1,15 +1,21 @@
 import User from "../models/User.js";
 
-import { hashPassword, comparePassword} from "../services/authService.js";
+import {
+  hashPassword,
+  comparePassword,
+} from "../services/authService.js";
 
 import asyncHandler from "../utils/asyncHandler.js";
 
+import generateToken from "../utils/generateToken.js";
+
 import BadRequestError from "../errors/BadRequestError.js";
-import ApiResponse from "../responses/ApiResponse.js";
+
 import UnauthorizedError from "../errors/UnauthorizedError.js";
 
+import ApiResponse from "../responses/ApiResponse.js";
 
-import generateToken from "../utils/generateToken.js";
+import { userDto } from "../dto/user.dto.js";
 
 
 
@@ -17,6 +23,7 @@ import generateToken from "../utils/generateToken.js";
 
 
 export const registerLocalUser = asyncHandler(
+
   async (req, res) => {
 
     const { name, email, password } = req.body;
@@ -25,13 +32,15 @@ export const registerLocalUser = asyncHandler(
 
 
 
-    const existingUser = await User.findOne({ email });
+    const existingUser =
+      await User.findOne({ email });
 
 
 
 
 
     if (existingUser) {
+
       throw new BadRequestError(
         "User already exists"
       );
@@ -49,7 +58,9 @@ export const registerLocalUser = asyncHandler(
 
 
     const user = await User.create({
+
       name,
+
       email,
 
       password: hashedPassword,
@@ -66,23 +77,24 @@ export const registerLocalUser = asyncHandler(
     return res.status(201).json(
 
       new ApiResponse(
+
         201,
 
         "User registered successfully",
 
-        {
-          id: user._id,
-
-          name: user.name,
-
-          email: user.email,
-        }
+        userDto(user)
       )
     );
   }
 );
 
+
+
+
+
+
 export const loginLocalUser = asyncHandler(
+
   async (req, res) => {
 
     const { email, password } = req.body;
@@ -91,14 +103,16 @@ export const loginLocalUser = asyncHandler(
 
 
 
-    const user = await User.findOne({ email })
-      .select("+password");
+    const user = await User.findOne({
+      email,
+    }).select("+password");
 
 
 
 
 
     if (!user) {
+
       throw new UnauthorizedError(
         "Invalid email or password"
       );
@@ -119,6 +133,7 @@ export const loginLocalUser = asyncHandler(
 
 
     if (!isPasswordCorrect) {
+
       throw new UnauthorizedError(
         "Invalid email or password"
       );
@@ -139,6 +154,7 @@ export const loginLocalUser = asyncHandler(
     return res.status(200).json(
 
       new ApiResponse(
+
         200,
 
         "Login successful",
@@ -146,14 +162,31 @@ export const loginLocalUser = asyncHandler(
         {
           token,
 
-          user: {
-            id: user._id,
-
-            name: user.name,
-
-            email: user.email,
-          },
+          user: userDto(user),
         }
+      )
+    );
+  }
+);
+
+
+
+
+
+
+export const getMe = asyncHandler(
+
+  async (req, res) => {
+
+    return res.status(200).json(
+
+      new ApiResponse(
+
+        200,
+
+        "Current user fetched successfully",
+
+        userDto(req.user)
       )
     );
   }
