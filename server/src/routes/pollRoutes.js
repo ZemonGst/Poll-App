@@ -7,6 +7,7 @@ import {
   updatePoll,
   deletePoll,
   endPoll,
+  votePoll,
 } from "../controllers/pollController.js";
 
 import { protect }
@@ -49,7 +50,7 @@ router.get(
   getMyPolls
 );
 
-// Get Single Poll Route
+// Get Single id Poll Route
 router.get(
   "/:id",
   getPollById
@@ -85,6 +86,14 @@ router.patch(
   protect,
 
   endPoll
+);
+
+// Vote Poll Route
+router.post(
+
+  "/:id/vote",
+
+  votePoll
 );
 
 

@@ -11,6 +11,7 @@ import {
   updatePollService,
   deletePollService,
   endPollService,
+  votePollService,
 } from "../services/pollService.js";
 
 
@@ -180,6 +181,39 @@ export const endPoll = asyncHandler(
 
       message:
         "Poll ended successfully",
+
+      data: updatedPoll,
+    });
+  }
+);
+
+
+export const votePoll = asyncHandler(
+  async (
+    req,
+    res
+  ) => {
+
+    const updatedPoll =
+      await votePollService(
+
+        req.params.id,
+
+        req.body.optionId,
+
+        req.user || null,
+
+        req.sessionID || null
+      );
+
+    return res.status(200).json({
+
+      success: true,
+
+      statusCode: 200,
+
+      message:
+        "Vote submitted successfully",
 
       data: updatedPoll,
     });
