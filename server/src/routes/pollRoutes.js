@@ -2,6 +2,8 @@ import express from "express";
 
 import {
   createPoll,
+  getPollById,
+  getMyPolls
 } from "../controllers/pollController.js";
 
 import { protect }
@@ -37,6 +39,18 @@ router.post(
   createPoll
 );
 
+// Get Current User Polls
+router.get(
+  "/me",
+  protect,
+  getMyPolls
+);
+
+// Get Single Poll Route
+router.get(
+  "/:id",
+  getPollById
+);
 
 
 

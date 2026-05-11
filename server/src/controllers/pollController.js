@@ -6,6 +6,8 @@ from "../responses/ApiResponse.js";
 
 import {
   createPollService,
+  getPollByIdService,
+  getMyPollsService,
 } from "../services/pollService.js";
 
 
@@ -13,8 +15,7 @@ import {
 
 
 
-export const createPoll =
-  asyncHandler(
+export const createPoll =  asyncHandler(
 
     async (req, res) => {
 
@@ -44,3 +45,60 @@ export const createPoll =
       );
     }
   );
+
+  
+export const getPollById =   asyncHandler(
+
+    async (req, res) => {
+
+      const poll =
+        await getPollByIdService(
+          req.params.id
+        );
+
+
+
+
+
+      return res.status(200).json(
+
+        new ApiResponse(
+
+          200,
+
+          "Poll fetched successfully",
+
+          poll
+        )
+      );
+    }
+  );  
+
+export const getMyPolls =   asyncHandler(
+
+    async (req, res) => {
+
+      const polls =
+        await getMyPollsService(
+          req.user._id
+        );
+
+
+
+
+
+      return res.status(200).json(
+
+        new ApiResponse(
+
+          200,
+
+          "My polls fetched successfully",
+
+          polls
+        )
+      );
+    }
+  );  
+
+
