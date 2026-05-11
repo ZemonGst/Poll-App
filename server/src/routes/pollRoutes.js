@@ -3,7 +3,10 @@ import express from "express";
 import {
   createPoll,
   getPollById,
-  getMyPolls
+  getMyPolls,
+  updatePoll,
+  deletePoll,
+  endPoll,
 } from "../controllers/pollController.js";
 
 import { protect }
@@ -51,6 +54,39 @@ router.get(
   "/:id",
   getPollById
 );
+
+// Update Poll Route
+router.patch(
+
+  "/:id",
+
+  protect,
+
+  validate(createPollSchema),
+
+  updatePoll
+);
+
+// Delete Poll Route
+router.delete(
+
+  "/:id",
+
+  protect,
+
+  deletePoll
+);
+
+// End Poll Route
+router.patch(
+
+  "/:id/end",
+
+  protect,
+
+  endPoll
+);
+
 
 
 

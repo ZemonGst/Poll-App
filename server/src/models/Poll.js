@@ -58,7 +58,7 @@ const pollSchema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["active", "expired", "draft"],
+      enum: ["active", "expired", "draft","ended"],
       default: "active",
     },
     allowAnonymousVotes: {
