@@ -18,6 +18,7 @@ from "../middleware/validateMiddleware.js";
 
 import {
   createPollSchema,
+  votePollSchema,
 } from "../validators/poll.validator.js";
 
 
@@ -93,9 +94,10 @@ router.post(
 
   "/:id/vote",
 
+  validate(votePollSchema),
+
   votePoll
 );
-
 
 
 

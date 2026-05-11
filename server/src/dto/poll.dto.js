@@ -9,7 +9,18 @@ export const pollDto = (poll) => {
     description:
       poll.description,
 
-    options: poll.options,
+    options:
+      poll.options.map(
+        (option) => ({
+
+          id: option._id,
+
+          text: option.text,
+
+          voteCount:
+            option.voteCount,
+        })
+      ),
 
     totalVotes:
       poll.totalVotes,
@@ -32,10 +43,29 @@ export const pollDto = (poll) => {
     expiresAt:
       poll.expiresAt,
 
-    tags: poll.tags,
+    tags:
+      poll.tags,
 
-    analytics:
-      poll.analytics,
+    analytics: {
+
+      views:
+        poll.analytics.views,
+
+      shares:
+        poll.analytics.shares,
+
+      uniqueParticipants:
+        poll.analytics
+          .uniqueParticipants,
+
+      authenticatedVotes:
+        poll.analytics
+          .authenticatedVotes,
+
+      anonymousVotes:
+        poll.analytics
+          .anonymousVotes,
+    },
 
     createdBy:
       poll.createdBy,

@@ -1,7 +1,6 @@
 import Joi from "joi";
 
-export const createPollSchema =
-  Joi.object({
+export const createPollSchema =   Joi.object({
 
     title: Joi.string()
       .trim()
@@ -56,4 +55,15 @@ export const createPollSchema =
         Joi.string().trim()
       )
       .default([]),
+  });
+
+export const votePollSchema =
+
+  Joi.object({
+
+    optionId:
+
+      Joi.string()
+        .trim()
+        .required(),
   });
