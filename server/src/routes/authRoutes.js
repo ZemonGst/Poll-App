@@ -6,6 +6,7 @@ import {
   loginLocalUser,
   getMe,
   googleAuthSuccess,
+  logoutUser
 } from "../controllers/authController.js";
 
 import { protect } from "../middleware/authMiddleware.js";
@@ -60,6 +61,13 @@ router.get(
     failureRedirect: "/login",
   }),
   googleAuthSuccess
+);
+
+// logout route
+router.post(
+  "/logout",
+  protect,
+  logoutUser
 );
 
 export default router;

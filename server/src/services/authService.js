@@ -227,3 +227,8 @@ export const createAuthResponse = (user) => {
     user: userDto(user),
   };
 };
+
+export const logoutUserService = async () => {
+
+    return null;
+  };

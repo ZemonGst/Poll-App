@@ -6,6 +6,7 @@ import {
   loginUserService,
   getCurrentUserService,
   createAuthResponse,
+  logoutUserService
 } from "../services/authService.js";
 
 export const registerLocalUser = asyncHandler(async (req, res) => {
@@ -55,3 +56,15 @@ export const googleAuthSuccess = asyncHandler(async (req, res) => {
     )
   );
 });
+
+export const logoutUser =  asyncHandler(async (req, res) => { await logoutUserService();
+   return res.status(200).json(
+
+      new ApiResponse(
+        200,
+        "Logout successful",
+        null
+      )
+    );
+  });
+ 
