@@ -9,6 +9,7 @@ import authRoutes from "./routes/authRoutes.js";
 import pollRoutes from "./routes/pollRoutes.js";
 import pollResultRoutes from "./routes/pollResultRoutes.js";
 import pollAnalyticsRoutes from "./routes/pollAnalyticsRoutes.js";
+import pollLeaderboardRoutes from "./routes/pollLeaderboardRoutes.js";
 
 import sessionMiddleware from "./middleware/sessionMiddleware.js";
 import errorMiddleware from "./middleware/errorMiddleware.js";
@@ -29,6 +30,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/polls", pollRoutes);
 app.use("/api/polls",pollResultRoutes);
 app.use("/api/polls", pollAnalyticsRoutes);
+app.use("/api/polls", pollLeaderboardRoutes);
 
 app.get("/", (req, res) => {
   res.send("Server is running");

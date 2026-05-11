@@ -1,6 +1,7 @@
 import express from "express";
 
 import {
+
   createPoll,
   getPollById,
   getMyPolls,
@@ -8,6 +9,7 @@ import {
   deletePoll,
   endPoll,
   votePoll,
+
 } from "../controllers/pollController.js";
 
 import { protect }
@@ -17,89 +19,65 @@ import validate
 from "../middleware/validateMiddleware.js";
 
 import {
+
   createPollSchema,
   votePollSchema,
+  updatePollSchema,
+
 } from "../validators/poll.validator.js";
-
-
-
-
 
 const router =
   express.Router();
 
 
-
-
-
-// Create Poll Route
+// Create Poll
 router.post(
-
   "/",
-
   protect,
-
   validate(createPollSchema),
-
   createPoll
 );
 
-// Get Current User Polls
+// Get User Polls
 router.get(
   "/me",
   protect,
   getMyPolls
 );
 
-// Get Single id Poll Route
+// Get Poll By ID
 router.get(
   "/:id",
   getPollById
 );
 
-// Update Poll Route
+// Update Poll
 router.patch(
-
   "/:id",
-
   protect,
-
-  validate(createPollSchema),
-
+  validate(updatePollSchema),
   updatePoll
 );
 
-// Delete Poll Route
+// Delete Poll
 router.delete(
-
   "/:id",
-
   protect,
-
   deletePoll
 );
 
-// End Poll Route
+// End Poll
 router.patch(
-
   "/:id/end",
-
   protect,
-
   endPoll
 );
 
-// Vote Poll Route
+// Vote Poll
 router.post(
-
   "/:id/vote",
-
   validate(votePollSchema),
-
   votePoll
 );
-
-
-
 
 export default router;

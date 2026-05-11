@@ -47,8 +47,29 @@ export const createPollSchema =   Joi.object({
       Joi.boolean()
         .default(false),
 
-    expiresAt: Joi.date()
-      .allow(null),
+    showLeaderboard:
+      Joi.boolean()
+        .default(false),
+
+    showAdvancedAnalytics:
+      Joi.boolean()
+        .default(false),
+
+    leaderboardLimit:
+      Joi.number()
+        .min(1)
+        .max(100)
+        .default(10),
+
+    timerDuration:
+      Joi.number()
+        .min(1)
+        .max(30)
+        .default(1),
+
+    expiresAt:
+      Joi.date()
+        .allow(null),
 
     tags: Joi.array()
       .items(
@@ -57,13 +78,74 @@ export const createPollSchema =   Joi.object({
       .default([]),
   });
 
-export const votePollSchema =
 
-  Joi.object({
+export const votePollSchema =   Joi.object({
 
     optionId:
 
       Joi.string()
         .trim()
         .required(),
+  });
+
+
+export const updatePollSchema =   Joi.object({
+
+    title:
+      Joi.string()
+        .trim()
+        .min(3)
+        .max(200),
+
+    description:
+      Joi.string()
+        .trim()
+        .max(1000)
+        .allow(""),
+
+    visibility:
+      Joi.string()
+        .valid(
+          "public",
+          "private"
+        ),
+
+    pollType:
+      Joi.string()
+        .valid(
+          "single-choice",
+          "multiple-choice"
+        ),
+
+    allowAnonymousVotes:
+      Joi.boolean(),
+
+    allowMultipleVotes:
+      Joi.boolean(),
+
+    showLeaderboard:
+      Joi.boolean(),
+
+    showAdvancedAnalytics:
+      Joi.boolean(),
+
+    leaderboardLimit:
+      Joi.number()
+        .min(1)
+        .max(100),
+
+    timerDuration:
+      Joi.number()
+        .min(1)
+        .max(30),
+
+    expiresAt:
+      Joi.date()
+        .allow(null),
+
+    tags:
+      Joi.array()
+        .items(
+          Joi.string().trim()
+        ),
   });

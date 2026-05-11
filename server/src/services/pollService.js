@@ -108,17 +108,34 @@ export const updatePollService = async (pollId, userId, updateData) => {
   }
 
   // Define fields that are allowed to be updated
-  const allowedFields = [
-    "title",
-    "description",
-    "options",
-    "visibility",
-    "pollType",
-    "allowAnonymousVotes",
-    "allowMultipleVotes",
-    "expiresAt",
-    "tags"
-  ];
+const allowedFields = [
+
+  "title",
+
+  "description",
+
+  "options",
+
+  "visibility",
+
+  "pollType",
+
+  "allowAnonymousVotes",
+
+  "allowMultipleVotes",
+
+  "showLeaderboard",
+
+  "showAdvancedAnalytics",
+
+  "leaderboardLimit",
+
+  "timerDuration",
+
+  "expiresAt",
+
+  "tags",
+];
 
   const filteredUpdates = {};
   allowedFields.forEach((field) => {
@@ -130,7 +147,7 @@ export const updatePollService = async (pollId, userId, updateData) => {
   Object.assign(poll, filteredUpdates);
   await poll.save();
 
-  return pollDto(poll); // Ensure we return the DTO as before.
+  return pollDto(poll); 
 };
 
 export const deletePollService = async (

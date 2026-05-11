@@ -136,6 +136,16 @@ const pollSchema = new mongoose.Schema(
       default: false,
     },
 
+    leaderboardLimit: {
+      type: Number,
+      default: 10,
+    },
+
+    timerDuration: {
+      type: Number,
+      default: 1,
+    },
+
     expiresAt: {
       type: Date,
       default: null,

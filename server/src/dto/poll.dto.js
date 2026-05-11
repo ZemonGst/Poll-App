@@ -40,6 +40,18 @@ export const pollDto = (poll) => {
     allowMultipleVotes:
       poll.allowMultipleVotes,
 
+    showLeaderboard:
+      poll.showLeaderboard,
+
+    showAdvancedAnalytics:
+      poll.showAdvancedAnalytics,
+
+    leaderboardLimit:
+      poll.leaderboardLimit,
+
+    timerDuration:
+      poll.timerDuration,
+
     expiresAt:
       poll.expiresAt,
 
