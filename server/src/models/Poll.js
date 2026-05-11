@@ -126,6 +126,16 @@ const pollSchema = new mongoose.Schema(
       default: false,
     },
 
+    showLeaderboard: {
+      type: Boolean,
+      default: false,
+    },
+
+    showAdvancedAnalytics: {
+      type: Boolean,
+      default: false,
+    },
+
     expiresAt: {
       type: Date,
       default: null,

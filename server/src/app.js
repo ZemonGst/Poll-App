@@ -7,6 +7,7 @@ import "./config/passport.js";
 
 import authRoutes from "./routes/authRoutes.js";
 import pollRoutes from "./routes/pollRoutes.js";
+import pollResultRoutes from "./routes/pollResultRoutes.js";
 
 import sessionMiddleware from "./middleware/sessionMiddleware.js";
 import errorMiddleware from "./middleware/errorMiddleware.js";
@@ -25,6 +26,7 @@ app.use(passport.session());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/polls", pollRoutes);
+app.use("/api/polls",pollResultRoutes);
 
 app.get("/", (req, res) => {
   res.send("Server is running");
