@@ -8,22 +8,29 @@ import UnauthorizedError from "../../../../common/errors/UnauthorizedError.js";
 
 import generateShareCode from "../../../../common/utils/generateShareCode.js";
 
-export const createPollService = async ({
-  title,
-  description,
-  options,
-  visibility,
-  pollType,
-  allowAnonymousVotes,
-  allowMultipleVotes,
-  showLeaderboard,
-  showAdvancedAnalytics,
-  leaderboardLimit,
-  timerDuration,
-  expiresAt,
-  tags,
-  createdBy,
-}) => {
+export const createPollService = async (pollData) => {
+  const {
+    title,
+    description,
+    options,
+    visibility,
+    pollType,
+    allowAnonymousVotes,
+    allowMultipleVotes,
+    showLeaderboard,
+    showAdvancedAnalytics,
+    leaderboardLimit,
+    timerDuration = 30,
+    tags,
+    createdBy,
+  } = pollData;
+
+  let expiresAt = pollData.expiresAt;
+
+  // Calculate expiresAt if not provided
+  if (!expiresAt) {
+    expiresAt = new Date(Date.now() + timerDuration * 1000);
+  }
 
   let shareCode;
 

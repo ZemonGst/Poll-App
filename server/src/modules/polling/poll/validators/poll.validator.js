@@ -63,9 +63,8 @@ export const createPollSchema =   Joi.object({
 
     timerDuration:
       Joi.number()
-        .min(1)
-        .max(30)
-        .default(1),
+        .valid(30, 60, 600, 1200, 1800)
+        .default(30),
 
     expiresAt:
       Joi.date()
@@ -126,8 +125,7 @@ export const updatePollSchema =   Joi.object({
 
     timerDuration:
       Joi.number()
-        .min(1)
-        .max(30),
+        .valid(30, 60, 600, 1200, 1800),
 
     expiresAt:
       Joi.date()

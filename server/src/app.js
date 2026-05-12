@@ -26,6 +26,9 @@ import pollLeaderboardRoutes
 import shareRoutes
   from "./modules/polling/share/routes/shareRoutes.js";
 
+import timerRoutes
+  from "./modules/polling/timer/routes/timerRoutes.js";
+
 import sessionMiddleware
   from "./common/middleware/sessionMiddleware.js";
 
@@ -85,6 +88,11 @@ app.use(
 app.use(
   "/api/share",
   shareRoutes
+);
+
+app.use(
+  "/api/polls",
+  timerRoutes
 );
 
 app.get("/", (req, res) => {
