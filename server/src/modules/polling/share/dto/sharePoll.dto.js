@@ -1,9 +1,11 @@
-export const pollDto = (poll) => {
+export const sharePollDto = (
+  poll
+) => {
 
   return {
 
     id: poll._id,
- 
+
     shareCode:
       poll.shareCode,
 
@@ -61,27 +63,6 @@ export const pollDto = (poll) => {
 
     tags:
       poll.tags,
-
-    analytics: {
-
-      views:
-        poll.analytics.views,
-
-      shares:
-        poll.analytics.shares,
-
-      uniqueParticipants:
-        poll.analytics
-          .uniqueParticipants,
-
-      authenticatedVotes:
-        poll.analytics
-          .authenticatedVotes,
-
-      anonymousVotes:
-        poll.analytics
-          .anonymousVotes,
-    },
 
     createdBy:
       poll.createdBy,

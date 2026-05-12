@@ -6,142 +6,197 @@ import { pollDto } from "../dto/poll.dto.js";
 import NotFoundError from "../../../../common/errors/NotFoundError.js";
 import UnauthorizedError from "../../../../common/errors/UnauthorizedError.js";
 
+import generateShareCode from "../../../../common/utils/generateShareCode.js";
+
 export const createPollService = async ({
-    title,
-    description,
-    options,
-    visibility,
-    pollType,
-    allowAnonymousVotes,
-    allowMultipleVotes,
-    showLeaderboard,
-    showAdvancedAnalytics,
-    leaderboardLimit,
-    timerDuration,
-    expiresAt,
-    tags,
-    createdBy,
-  }) => {
+  title,
+  description,
+  options,
+  visibility,
+  pollType,
+  allowAnonymousVotes,
+  allowMultipleVotes,
+  showLeaderboard,
+  showAdvancedAnalytics,
+  leaderboardLimit,
+  timerDuration,
+  expiresAt,
+  tags,
+  createdBy,
+}) => {
 
-    const poll =
-      await Poll.create({
+  let shareCode;
 
-        title,
+  let existingPoll;
 
-        description,
+  do {
 
-        options,
+    shareCode =
+      generateShareCode();
 
-        visibility,
-
-        pollType,
-
-        allowAnonymousVotes,
-
-        allowMultipleVotes,
-
-        showLeaderboard,
-
-        showAdvancedAnalytics,
-
-        leaderboardLimit,
-
-        timerDuration,
-
-        expiresAt,
-
-        tags,
-
-        createdBy,
+    existingPoll =
+      await Poll.findOne({
+        shareCode,
       });
 
-    await User.findByIdAndUpdate(
+  } while (existingPoll);
+
+  const poll =
+    await Poll.create({
+
+      title,
+
+      description,
+
+      options,
+
+      visibility,
+
+      pollType,
+
+      allowAnonymousVotes,
+
+      allowMultipleVotes,
+
+      showLeaderboard,
+
+      showAdvancedAnalytics,
+
+      leaderboardLimit,
+
+      timerDuration,
+
+      expiresAt,
+
+      tags,
+
+      shareCode,
+
       createdBy,
-      { $push: { createdPolls: poll._id } }
-    );
+    });
 
-    return pollDto(poll);
-  };
-
-export const getPollByIdService =  async (pollId) => {
-
-    const poll =
-      await Poll.findById(pollId);
-
-    if (!poll) {
-
-      throw new NotFoundError(
-        "Poll not found"
-      );
+  await User.findByIdAndUpdate(
+    createdBy,
+    {
+      $push: {
+        createdPolls: poll._id,
+      },
     }
+  );
 
-    return pollDto(poll);
-  };
+  return pollDto(poll);
+};
 
-export const getMyPollsService =   async (userId) => {
+export const getPollByIdService = async (
+  pollId
+) => {
 
-    const polls =
-      await Poll.find({
+  const poll =
+    await Poll.findById(pollId);
 
-        createdBy: userId,
-      })
-
-      .sort({
-        createdAt: -1,
-      });
-
-    return polls.map((poll) =>
-      pollDto(poll)
-    );
-  };
-
-export const updatePollService = async (pollId, userId, updateData) => {
-  const poll = await Poll.findById(pollId);
   if (!poll) {
-    throw new NotFoundError("Poll not found");
+
+    throw new NotFoundError(
+      "Poll not found"
+    );
   }
 
-  if (poll.createdBy.toString() !== userId.toString()) {
-    throw new UnauthorizedError("You are not authorized to update this poll");
+  return pollDto(poll);
+};
+
+export const getMyPollsService = async (
+  userId
+) => {
+
+  const polls =
+    await Poll.find({
+
+      createdBy: userId,
+    })
+
+    .sort({
+      createdAt: -1,
+    });
+
+  return polls.map((poll) =>
+    pollDto(poll)
+  );
+};
+
+export const updatePollService = async (
+  pollId,
+  userId,
+  updateData
+) => {
+
+  const poll =
+    await Poll.findById(pollId);
+
+  if (!poll) {
+
+    throw new NotFoundError(
+      "Poll not found"
+    );
   }
 
-const allowedFields = [
+  if (
+    poll.createdBy.toString()
+    !== userId.toString()
+  ) {
 
-  "title",
+    throw new UnauthorizedError(
+      "You are not authorized to update this poll"
+    );
+  }
 
-  "description",
+  const allowedFields = [
 
-  "options",
+    "title",
 
-  "visibility",
+    "description",
 
-  "pollType",
+    "options",
 
-  "allowAnonymousVotes",
+    "visibility",
 
-  "allowMultipleVotes",
+    "pollType",
 
-  "showLeaderboard",
+    "allowAnonymousVotes",
 
-  "showAdvancedAnalytics",
+    "allowMultipleVotes",
 
-  "leaderboardLimit",
+    "showLeaderboard",
 
-  "timerDuration",
+    "showAdvancedAnalytics",
 
-  "expiresAt",
+    "leaderboardLimit",
 
-  "tags",
-];
+    "timerDuration",
+
+    "expiresAt",
+
+    "tags",
+  ];
 
   const filteredUpdates = {};
+
   allowedFields.forEach((field) => {
-    if (updateData[field] !== undefined) {
-      filteredUpdates[field] = updateData[field];
+
+    if (
+      updateData[field]
+      !== undefined
+    ) {
+
+      filteredUpdates[field] =
+        updateData[field];
     }
   });
 
-  Object.assign(poll, filteredUpdates);
+  Object.assign(
+    poll,
+    filteredUpdates
+  );
+
   await poll.save();
 
   return pollDto(poll);

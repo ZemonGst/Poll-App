@@ -50,6 +50,14 @@ const pollSchema = new mongoose.Schema(
       maxlength: 200,
     },
 
+    shareCode: {
+      type: String,
+      unique: true,
+      uppercase: true,
+      index: true,
+      sparse: true,
+    },
+
     description: {
       type: String,
       trim: true,
