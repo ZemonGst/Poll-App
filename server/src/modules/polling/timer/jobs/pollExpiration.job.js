@@ -1,4 +1,7 @@
 import Poll from "../../poll/models/Poll.js";
+import {
+  emitPollEnded,
+} from "../../../realtime/handlers/pollRealtime.handler.js";
 
 export const startPollExpirationJob = () => {
   console.log("Poll expiration job started...");
@@ -20,6 +23,13 @@ export const startPollExpirationJob = () => {
         for (const poll of expiredPolls) {
           poll.status = "ended";
           await poll.save();
+
+          emitPollEnded({
+
+            pollId: poll._id,
+
+            pollData: poll,
+          });
         }
       }
     } catch (error) {

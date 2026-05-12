@@ -1,9 +1,23 @@
-import Poll from "../../../polling/poll/models/Poll.js";
+import Poll
+  from "../../../polling/poll/models/Poll.js";
 
-import { pollDto } from "../../../polling/poll/dto/poll.dto.js";
+import {
+  pollDto,
+} from "../../../polling/poll/dto/poll.dto.js";
 
-import NotFoundError from "../../../../common/errors/NotFoundError.js";
-import BadRequestError from "../../../../common/errors/BadRequestError.js";
+import {
+  emitVoteUpdate,
+} from "../../../realtime/handlers/voteRealtime.handler.js";
+
+import {
+  emitAnalyticsUpdate,
+} from "../../../realtime/handlers/analyticsRealtime.handler.js";
+
+import NotFoundError
+  from "../../../../common/errors/NotFoundError.js";
+
+import BadRequestError
+  from "../../../../common/errors/BadRequestError.js";
 
 export const votePollService = async (
 
@@ -103,6 +117,46 @@ export const votePollService = async (
     .uniqueParticipants += 1;
 
   await poll.save();
+
+  emitVoteUpdate({
+
+    pollId: poll._id,
+
+    voteData: {
+
+      pollId:
+        poll._id,
+
+      totalVotes:
+        poll.totalVotes,
+
+      options:
+        poll.options,
+    },
+  });
+
+  emitAnalyticsUpdate({
+
+    pollId: poll._id,
+
+    analyticsData: {
+
+      totalVotes:
+        poll.totalVotes,
+
+      authenticatedVotes:
+        poll.analytics
+          .authenticatedVotes,
+
+      anonymousVotes:
+        poll.analytics
+          .anonymousVotes,
+
+      uniqueParticipants:
+        poll.analytics
+          .uniqueParticipants,
+    },
+  });
 
   return pollDto(poll);
 };

@@ -3,6 +3,11 @@ import User from "../../../auth/models/User.js";
 
 import { pollDto } from "../dto/poll.dto.js";
 
+import {
+  emitPollUpdate,
+  emitPollEnded,
+} from "../../../realtime/handlers/pollRealtime.handler.js";
+
 import NotFoundError from "../../../../common/errors/NotFoundError.js";
 import UnauthorizedError from "../../../../common/errors/UnauthorizedError.js";
 
@@ -27,7 +32,6 @@ export const createPollService = async (pollData) => {
 
   let expiresAt = pollData.expiresAt;
 
-  // Calculate expiresAt if not provided
   if (!expiresAt) {
     expiresAt = new Date(Date.now() + timerDuration * 1000);
   }
@@ -205,6 +209,14 @@ export const updatePollService = async (
   );
 
   await poll.save();
+
+  emitPollUpdate({
+
+    pollId: poll._id,
+
+    pollData:
+      pollDto(poll),
+  });
 
   return pollDto(poll);
 };
