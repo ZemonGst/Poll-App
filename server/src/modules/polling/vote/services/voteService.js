@@ -122,17 +122,7 @@ export const votePollService = async (
 
     pollId: poll._id,
 
-    voteData: {
-
-      pollId:
-        poll._id,
-
-      totalVotes:
-        poll.totalVotes,
-
-      options:
-        poll.options,
-    },
+    poll,
   });
 
   emitAnalyticsUpdate({

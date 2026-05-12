@@ -214,8 +214,7 @@ export const updatePollService = async (
 
     pollId: poll._id,
 
-    pollData:
-      pollDto(poll),
+    poll,
   });
 
   return pollDto(poll);

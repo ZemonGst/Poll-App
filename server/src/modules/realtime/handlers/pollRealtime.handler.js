@@ -1,42 +1,21 @@
-import { getIO }
-  from "../socket/socketServer.js";
+import { pollRealtimeDto } from "../dto/pollRealtime.dto.js";
+import { getIO } from "../socket/socketServer.js";
+import { getPollRoomName } from "../socket/socketRooms.js";
 
-import {
-  getPollRoomName,
-} from "../socket/socketRooms.js";
+export const emitPollUpdate = ({ pollId, poll }) => {
+  const io = getIO();
+  const roomName = getPollRoomName(pollId);
 
-export const emitPollUpdate =
-  ({ pollId, pollData }) => {
+  io.to(roomName).emit("poll-update", pollRealtimeDto(poll));
 
-    const io = getIO();
+  console.log(`Poll update emitted to ${roomName}`);
+};
 
-    const roomName =
-      getPollRoomName(pollId);
+export const emitPollEnded = ({ pollId, poll }) => {
+  const io = getIO();
+  const roomName = getPollRoomName(pollId);
 
-    io.to(roomName).emit(
-      "poll-update",
-      pollData
-    );
+  io.to(roomName).emit("poll-ended", pollRealtimeDto(poll));
 
-    console.log(
-      `Poll update emitted to ${roomName}`
-    );
-  };
-
-export const emitPollEnded =
-  ({ pollId, pollData }) => {
-
-    const io = getIO();
-
-    const roomName =
-      getPollRoomName(pollId);
-
-    io.to(roomName).emit(
-      "poll-ended",
-      pollData
-    );
-
-    console.log(
-      `Poll ended emitted to ${roomName}`
-    );
-  };
+  console.log(`Poll ended emitted to ${roomName}`);
+};

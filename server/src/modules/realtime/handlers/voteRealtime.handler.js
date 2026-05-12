@@ -1,24 +1,12 @@
-import { getIO }
-  from "../socket/socketServer.js";
+import { pollRealtimeDto } from "../dto/pollRealtime.dto.js";
+import { getIO } from "../socket/socketServer.js";
+import { getPollRoomName } from "../socket/socketRooms.js";
 
-import {
-  getPollRoomName,
-} from "../socket/socketRooms.js";
+export const emitVoteUpdate = ({ pollId, poll }) => {
+  const io = getIO();
+  const roomName = getPollRoomName(pollId);
 
-export const emitVoteUpdate =
-  ({ pollId, voteData }) => {
+  io.to(roomName).emit("vote-update", pollRealtimeDto(poll));
 
-    const io = getIO();
-
-    const roomName =
-      getPollRoomName(pollId);
-
-    io.to(roomName).emit(
-      "vote-update",
-      voteData
-    );
-
-    console.log(
-      `Vote update emitted to ${roomName}`
-    );
-  };
+  console.log(`Vote update emitted to ${roomName}`);
+};

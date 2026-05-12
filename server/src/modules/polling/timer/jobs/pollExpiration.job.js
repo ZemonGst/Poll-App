@@ -28,7 +28,7 @@ export const startPollExpirationJob = () => {
 
             pollId: poll._id,
 
-            pollData: poll,
+            poll,
           });
         }
       }
