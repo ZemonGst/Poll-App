@@ -67,14 +67,6 @@ const pollSchema = new mongoose.Schema(
 
     options: {
       type: [pollOptionSchema],
-
-      validate: {
-        validator: (value) =>
-          value.length >= 2,
-
-        message:
-          "Poll must contain at least 2 options",
-      },
     },
 
     createdBy: {
