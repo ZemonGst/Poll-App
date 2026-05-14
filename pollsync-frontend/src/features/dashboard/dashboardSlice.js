@@ -34,6 +34,18 @@ const dashboardSlice = createSlice({
         poll.status = updatedPoll.status || poll.status;
       }
     },
+    updatePollAnalytics: (state, action) => {
+      const data = action.payload;
+      const pollId = data?.pollId || data?.id || data?._id;
+      const poll = state.polls.find((p) => (p.id || p._id) === pollId);
+
+      if (poll && data) {
+        poll.totalVotes = data.totalVotes ?? poll.totalVotes;
+        poll.uniqueParticipants = data.uniqueParticipants ?? poll.uniqueParticipants;
+        poll.authenticatedVotes = data.authenticatedVotes ?? poll.authenticatedVotes;
+        poll.anonymousVotes = data.anonymousVotes ?? poll.anonymousVotes;
+      }
+    },
     removePoll: (state, action) => {
       state.polls = state.polls.filter((p) => (p.id || p._id) !== action.payload);
     },
@@ -64,6 +76,6 @@ const dashboardSlice = createSlice({
   },
 });
 
-export const { updatePollVotes, removePoll, markPollEnded } = dashboardSlice.actions;
+export const { updatePollVotes, updatePollAnalytics, removePoll, markPollEnded } = dashboardSlice.actions;
 
 export default dashboardSlice.reducer;

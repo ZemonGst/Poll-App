@@ -258,12 +258,6 @@ export default function CreatePollPage() {
               onChange={() => handleToggle('isAnonymousAllowed')}
             />
             <ToggleSwitch
-              label="Multiple Choice"
-              description="Allow participants to select more than one option."
-              checked={formData.isMultipleChoice}
-              onChange={() => handleToggle('isMultipleChoice')}
-            />
-            <ToggleSwitch
               label="Show Leaderboard"
               description="Display a ranked list of voters (if not completely anonymous)."
               checked={formData.showLeaderboard}
@@ -274,12 +268,6 @@ export default function CreatePollPage() {
               description="Allow everyone to see detailed charts and engagement stats."
               checked={formData.showAnalytics}
               onChange={() => handleToggle('showAnalytics')}
-            />
-            <ToggleSwitch
-              label="Collect Participant Info"
-              description="Require names even if voting anonymously."
-              checked={formData.collectParticipantInfo}
-              onChange={() => handleToggle('collectParticipantInfo')}
             />
           </div>
         </Card>

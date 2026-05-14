@@ -15,7 +15,7 @@ export const emitAnalyticsUpdate =
 
     io.to(roomName).emit(
       "analytics-update",
-      analyticsData
+      { ...analyticsData, pollId }
     );
 
     console.log(

@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMyPolls, updatePollVotes, removePoll, markPollEnded } from '../dashboardSlice';
+import { fetchMyPolls, updatePollVotes, updatePollAnalytics, removePoll, markPollEnded } from '../dashboardSlice';
 import { dashboardApi } from '../dashboardApi';
 import { getSocket, SOCKET_EVENTS } from '../../../services/socket';
 import Button from '../../../components/ui/Button';
@@ -46,12 +46,18 @@ export default function DashboardPage() {
       dispatch(markPollEnded(data));
     };
 
+    const handleAnalyticsUpdate = (data) => {
+      dispatch(updatePollAnalytics(data));
+    };
+
     socket.on(SOCKET_EVENTS.VOTE_UPDATE, handleVoteUpdate);
     socket.on(SOCKET_EVENTS.POLL_ENDED, handlePollEnded);
+    socket.on(SOCKET_EVENTS.ANALYTICS_UPDATE, handleAnalyticsUpdate);
 
     return () => {
       socket.off(SOCKET_EVENTS.VOTE_UPDATE, handleVoteUpdate);
       socket.off(SOCKET_EVENTS.POLL_ENDED, handlePollEnded);
+      socket.off(SOCKET_EVENTS.ANALYTICS_UPDATE, handleAnalyticsUpdate);
       ids.forEach(pollId => {
         socket.emit(SOCKET_EVENTS.LEAVE_POLL, { pollId });
       });
