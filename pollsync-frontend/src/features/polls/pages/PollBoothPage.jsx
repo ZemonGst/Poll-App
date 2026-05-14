@@ -219,33 +219,33 @@ export default function PollBoothPage() {
 
         {/* Voted View */}
         {hasVoted ? (
-          <Card className="p-6 md:p-8">
-            <h3 className="text-tertiary text-center mb-8 font-sora flex items-center justify-center gap-2">
-              <span className="material-symbols-outlined">check_circle</span>
-              Your vote was counted
-            </h3>
-            <div className="flex flex-col gap-4 mb-8">
-               {activePoll.options.map(opt => {
-                 const maxVotes = Math.max(...activePoll.options.map(o => o.voteCount || 0));
-                 const isLeading = opt.voteCount > 0 && opt.voteCount === maxVotes;
-                 const percentage = activePoll.totalVotes > 0 
-                    ? (opt.voteCount / activePoll.totalVotes) * 100 
-                    : 0;
-                 return (
-                   <VoteBar 
-                     key={opt.id || opt._id} 
-                     percentage={percentage} 
-                     label={opt.text} 
-                     votes={opt.voteCount || 0} 
-                     isLeading={isLeading} 
-                   />
-                 );
-               })}
-            </div>
-            <Button onClick={() => navigate(`/poll/${pollId}/results`)} variant="ghost" className="w-full">
-              View Full Results
-            </Button>
-          </Card>
+          <div className="max-w-md mx-auto">
+            <Card className="p-10 text-center flex flex-col items-center gap-6 overflow-hidden relative">
+              {/* Decorative background pulse */}
+              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-tertiary/10 blur-3xl rounded-full -translate-y-1/2" />
+              
+              <div className="relative">
+                <div className="absolute inset-0 bg-tertiary/20 blur-xl rounded-full animate-pulse" />
+                <span className="material-symbols-outlined text-6xl text-tertiary relative z-10" style={{ fontVariationSettings: "'FILL' 1" }}>
+                  check_circle
+                </span>
+              </div>
+              
+              <div className="space-y-3 relative z-10">
+                <h2 className="text-2xl font-sora text-on-surface">Your vote was counted!</h2>
+                <p className="text-on-surface-variant font-hanken-grotesk">
+                  Waiting for poll to end...
+                </p>
+              </div>
+
+              {/* Subtle animated indicator */}
+              <div className="flex gap-1.5 mt-2 relative z-10">
+                <div className="w-2 h-2 rounded-full bg-tertiary/40 animate-bounce" style={{ animationDelay: '0ms' }} />
+                <div className="w-2 h-2 rounded-full bg-tertiary/60 animate-bounce" style={{ animationDelay: '150ms' }} />
+                <div className="w-2 h-2 rounded-full bg-tertiary animate-bounce" style={{ animationDelay: '300ms' }} />
+              </div>
+            </Card>
+          </div>
         ) : (
           /* Voting View */
           <div className="flex flex-col gap-4">

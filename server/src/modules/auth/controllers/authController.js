@@ -48,7 +48,8 @@ export const getMe = asyncHandler(async (req, res) => {
 
 export const googleAuthSuccess = (req, res) => {
   const token = generateToken({ id: req.user._id });
-  res.redirect('http://localhost:5173/auth/callback?token=' + token);
+  const clientUrl = process.env.CLIENT_URL || 'http://localhost:5173';
+  res.redirect(`${clientUrl}/auth/callback?token=${token}`);
 };
 
 export const logoutUser =  asyncHandler(async (req, res) => { await logoutUserService();

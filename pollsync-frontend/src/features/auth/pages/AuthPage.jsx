@@ -71,7 +71,8 @@ export default function AuthPage() {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = 'http://localhost:8000/api/auth/google';
+    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+    window.location.href = `${apiBaseUrl}/api/auth/google`;
   };
 
   return (
