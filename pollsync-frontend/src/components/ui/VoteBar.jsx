@@ -1,26 +1,37 @@
 import React from 'react';
 
-export default function VoteBar({ percentage, label, votes, isLeading }) {
-  const displayPercent = Math.round(percentage);
+const VoteBar = ({ percentage, label, votes, isLeading }) => {
+  const safePercentage = Math.max(percentage, 2);
   
   return (
-    <div className="w-full mb-4">
-      <div className="flex justify-between items-end mb-2">
-        <span className="font-hanken-grotesk text-on-surface font-medium">
+    <div className="w-full" style={{ minHeight: '48px' }}>
+      <div className="flex justify-between items-center mb-1">
+        <span className="font-hanken-grotesk text-sm text-on-surface">
           {label}
         </span>
-        <span className="font-jetbrains-mono text-on-surface-variant text-sm flex gap-3">
-          <span>{votes} {votes === 1 ? 'vote' : 'votes'}</span>
-          <span>{displayPercent}%</span>
+        <span className="font-jetbrains-mono text-xs text-on-surface-variant">
+          {votes} · {Math.round(percentage)}%
         </span>
       </div>
-      
-      <div className="w-full bg-surface-container-highest h-3 rounded-full overflow-hidden">
-        <div 
-          className={`bg-gradient-to-r from-tertiary to-tertiary/70 h-full rounded-full transition-all duration-700 ease-out ${isLeading ? 'shadow-[0_0_12px_rgba(183,207,135,0.4)]' : ''}`}
-          style={{ width: `${percentage}%` }}
+      <div 
+        className="w-full bg-surface-container-highest rounded-full overflow-hidden"
+        style={{ height: '10px' }}
+      >
+        <div
+          style={{
+            width: `${safePercentage}%`,
+            height: '10px',
+            backgroundColor: '#b7cf87',
+            borderRadius: '9999px',
+            transition: 'width 0.6s ease-out',
+            boxShadow: isLeading 
+              ? '0 0 10px rgba(183,207,135,0.5)' 
+              : 'none',
+          }}
         />
       </div>
     </div>
   );
-}
+};
+
+export default VoteBar;
