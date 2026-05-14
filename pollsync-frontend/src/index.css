@@ -64,3 +64,15 @@ body {
   from { opacity: 0; transform: translateY(-4px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* NProgress Custom Styles */
+#nprogress .bar {
+  background: #b7cf87 !important;
+  height: 3px !important;
+}
+#nprogress .peg {
+  box-shadow: 0 0 10px #b7cf87, 0 0 5px #b7cf87 !important;
+}
+#nprogress .spinner-icon {
+  display: none !important;
+}

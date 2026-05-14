@@ -1,9 +1,38 @@
-import React, { Suspense, lazy } from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import React, { Suspense, lazy, useEffect } from 'react';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import NProgress from 'nprogress';
 import AppLayout from '../components/layout/AppLayout';
 import ProtectedRoute from '../components/guards/ProtectedRoute';
 import OwnerRoute from '../components/guards/OwnerRoute';
 import Spinner from '../components/ui/Spinner';
+
+// NProgress Configuration
+NProgress.configure({ 
+  minimum: 0.3,
+  easing: 'ease',
+  speed: 500,
+  trickleSpeed: 200,
+  showSpinner: false
+});
+
+// Navigation Progress bar component
+function NavigationProgress() {
+  const location = useLocation();
+
+  useEffect(() => {
+    NProgress.start();
+    const timer = setTimeout(() => {
+      NProgress.done();
+    }, 800);
+
+    return () => {
+      clearTimeout(timer);
+      NProgress.done();
+    };
+  }, [location]);
+
+  return null;
+}
 
 // Pages — lazy loaded
 const AuthPage         = lazy(() => import('../features/auth/pages/AuthPage'));
@@ -20,6 +49,7 @@ const LiveDashboardPage = lazy(() => import('../features/dashboard/pages/LiveDas
 export default function AppRouter() {
   return (
     <BrowserRouter>
+      <NavigationProgress />
       <Suspense fallback={<Spinner variant="fullpage" />}>
         <Routes>
           {/* ── Public Routes ──────────────────────────────── */}
