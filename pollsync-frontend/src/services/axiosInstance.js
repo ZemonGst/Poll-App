@@ -63,15 +63,23 @@ api.interceptors.request.use((config) => {
 */
 
 api.interceptors.response.use(
-  (response) => response,
-
+  (res) => res,
   (error) => {
     if (error.response?.status === 401) {
-      localStorage.removeItem('token');
-
-      window.location.href = '/';
+      const isAuthCheck = error.config?.url?.includes('/api/auth/me');
+      const isLoginRoute = error.config?.url?.includes('/api/auth/login');
+      
+      // Only clear token and redirect if this is NOT 
+      // the initial session restore call
+      if (!isAuthCheck && !isLoginRoute) {
+        localStorage.removeItem('token');
+        window.location.href = '/auth';
+      } else {
+        // Silent fail — just clear the token
+        // let the app handle the unauthenticated state
+        localStorage.removeItem('token');
+      }
     }
-
     return Promise.reject(error);
   }
 );
