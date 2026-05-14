@@ -22,10 +22,55 @@ import errorMiddleware from "./common/middleware/errorMiddleware.js";
 
 const app = express();
 
-app.use(cors({
-  origin: process.env.CLIENT_URL,
-  credentials: true,
-}));
+const allowedOrigins = [
+"http://localhost:5173",
+"https://pollsync-vert.vercel.app",
+];
+
+const isVercelPreview =
+(origin) => {
+
+
+return (
+  typeof origin === "string" &&
+  origin.includes(
+    "zemongsts-projects.vercel.app"
+  )
+);
+
+
+};
+
+app.use(
+cors({
+
+origin: (
+  origin,
+  callback
+) => {
+
+  if (
+    !origin ||
+    allowedOrigins.includes(origin) ||
+    isVercelPreview(origin)
+  ) {
+
+    callback(null, true);
+
+  } else {
+
+    callback(
+      new Error(
+        "Not allowed by CORS"
+      )
+    );
+  }
+},
+
+credentials: true,
+
+})
+);
 
 app.use(express.json());
 
@@ -47,7 +92,7 @@ app.use("/api/share", shareRoutes);
 app.use("/api/polls", timerRoutes);
 
 app.get("/", (req, res) => {
-  res.send("Server is running");
+res.send("Server is running");
 });
 
 app.use(errorMiddleware);

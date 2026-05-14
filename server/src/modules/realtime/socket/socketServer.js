@@ -1,60 +1,102 @@
 import { Server }
-  from "socket.io";
+from "socket.io";
 
 import {
-  registerSocketEvents,
+registerSocketEvents,
 } from "./socketEvents.js";
 
 let io = null;
 
+const allowedOrigins = [
+"http://localhost:5173",
+"https://pollsync-vert.vercel.app",
+];
+
+const isVercelPreview =
+(origin) => {
+
+
+return (
+  typeof origin === "string" &&
+  origin.includes(
+    "zemongsts-projects.vercel.app"
+  )
+);
+
+};
+
 export const initializeSocketServer =
-  (httpServer) => {
+(httpServer) => {
 
-    io = new Server(httpServer, {
 
-      cors: {
-        origin:
-          process.env.CLIENT_URL,
+io = new Server(httpServer, {
 
-        methods: [
-          "GET",
-          "POST",
-        ],
+  cors: {
 
-        credentials: true,
-      },
-    });
+    origin: (
+      origin,
+      callback
+    ) => {
 
-    io.on(
-      "connection",
-      (socket) => {
+      if (
+        !origin ||
+        allowedOrigins.includes(origin) ||
+        isVercelPreview(origin)
+      ) {
 
-        console.log(
-          `Socket connected: ${socket.id}`
-        );
+        callback(null, true);
 
-        registerSocketEvents(
-          io,
-          socket
+      } else {
+
+        callback(
+          new Error(
+            "Not allowed by CORS"
+          )
         );
       }
-    );
+    },
+
+    methods: [
+      "GET",
+      "POST",
+    ],
+
+    credentials: true,
+  },
+});
+
+io.on(
+  "connection",
+  (socket) => {
 
     console.log(
-      "Socket.IO initialized"
+      `Socket connected: ${socket.id}`
     );
 
-    return io;
-  };
+    registerSocketEvents(
+      io,
+      socket
+    );
+  }
+);
+
+console.log(
+  "Socket.IO initialized"
+);
+
+return io;
+
+};
 
 export const getIO = () => {
 
-  if (!io) {
+if (!io) {
 
-    throw new Error(
-      "Socket.IO not initialized"
-    );
-  }
+throw new Error(
+  "Socket.IO not initialized"
+);
 
-  return io;
+}
+
+return io;
 };
