@@ -95,6 +95,11 @@ app.get("/", (req, res) => {
 res.send("Server is running");
 });
 
+app.get("/health", (req, res) => {
+  console.log("Health check ping");
+  res.status(200).json({ status: "ok" });
+});
+
 app.use(errorMiddleware);
 
 export default app;
