@@ -12,6 +12,12 @@ export default function LandingPage() {
   const [demoVotes, setDemoVotes] = useState([142, 85, 64, 12]);
   const [demoSelection, setDemoSelection] = useState(0);
 
+  const [votes, setVotes] = useState([
+    { id: 1, label: 'Dark Mode', count: 142, percentage: 45 },
+    { id: 2, label: 'Anonymous Voting', count: 89, percentage: 28 },
+    { id: 3, label: 'Realtime Results', count: 86, percentage: 27 },
+  ]);
+
   useEffect(() => {
     // Intersection Observer logic
     observerRef.current = new IntersectionObserver((entries) => {
@@ -49,6 +55,26 @@ export default function LandingPage() {
       clearInterval(timerInterval);
       clearInterval(selectionInterval);
     };
+  }, []);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setVotes(prev => {
+        const updated = prev.map(v => {
+          const change = Math.floor(Math.random() * 5) - 1;
+          return {
+            ...v,
+            count: Math.max(1, v.count + change),
+          };
+        });
+        const total = updated.reduce((sum, v) => sum + v.count, 0);
+        return updated.map(v => ({
+          ...v,
+          percentage: Math.round((v.count / total) * 100),
+        }));
+      });
+    }, 300);
+    return () => clearInterval(interval);
   }, []);
 
   const handleScrollDown = () => {
@@ -150,7 +176,7 @@ export default function LandingPage() {
         </div>
 
         {/* Hero Visual Mockup */}
-        <div className="w-full max-w-sm mx-auto animate-float z-10 relative mt-4">
+        <div className="w-full max-w-sm mx-auto animate-float-silk z-10 relative mt-4">
           {/* Decorative background glow behind the card */}
           <div className="absolute -inset-4 bg-tertiary/20 blur-[50px] rounded-full z-0" />
           
@@ -166,35 +192,32 @@ export default function LandingPage() {
               </div>
             </div>
             
-            <h3 className="font-sora text-xl text-on-surface mb-6 font-medium">What's the best team lunch spot?</h3>
+            <h3 className="font-sora text-xl text-on-surface mb-6 font-medium">Which feature should we build next?</h3>
             
-            <div className="flex flex-col gap-3">
-              {/* Option 1 */}
-              <div className="relative h-12 w-full bg-surface-container-high rounded-lg overflow-hidden border border-outline-variant/10">
-                <div className="absolute top-0 left-0 h-full bg-tertiary/20 animate-[vote-fill_3s_ease-in-out_infinite]" />
-                <div className="absolute inset-0 flex items-center justify-between px-4">
-                  <span className="font-hanken-grotesk text-on-surface z-10 font-medium">Pizza & Pasta</span>
-                  <span className="font-jetbrains-mono text-tertiary z-10 font-bold">42%</span>
+            <div className="flex flex-col gap-4 w-full">
+              {votes.map((option) => (
+                <div key={option.id} className="w-full">
+                  <div className="flex justify-between items-center text-sm mb-2 font-hanken-grotesk">
+                    <span className="text-on-surface font-medium flex items-center gap-2">
+                      {option.label}
+                      <span className="font-jetbrains-mono text-on-surface-variant/70 text-xs font-normal">
+                        ({option.count} votes)
+                      </span>
+                    </span>
+                    <span className="font-jetbrains-mono text-tertiary font-bold">{option.percentage}%</span>
+                  </div>
+                  <div className="h-2 w-full bg-surface-container rounded-full overflow-hidden border border-outline-variant/10">
+                    <div
+                      className="h-2 rounded-full bg-tertiary"
+                      style={{
+                        width: `${option.percentage}%`,
+                        transition: 'width 0.25s ease-out',
+                        boxShadow: '0 0 8px rgba(183,207,135,0.5)',
+                      }}
+                    />
+                  </div>
                 </div>
-              </div>
-              
-              {/* Option 2 */}
-              <div className="relative h-12 w-full bg-surface-container-high rounded-lg overflow-hidden border border-outline-variant/10">
-                <div className="absolute top-0 left-0 h-full bg-primary/20 animate-[vote-fill_4s_ease-in-out_infinite]" style={{ animationDelay: '1s' }} />
-                <div className="absolute inset-0 flex items-center justify-between px-4">
-                  <span className="font-hanken-grotesk text-on-surface z-10">Tacos</span>
-                  <span className="font-jetbrains-mono text-primary z-10">35%</span>
-                </div>
-              </div>
-              
-              {/* Option 3 */}
-              <div className="relative h-12 w-full bg-surface-container-high rounded-lg overflow-hidden border border-outline-variant/10">
-                <div className="absolute top-0 left-0 h-full bg-secondary/20 animate-[vote-fill_5s_ease-in-out_infinite]" style={{ animationDelay: '2s' }} />
-                <div className="absolute inset-0 flex items-center justify-between px-4">
-                  <span className="font-hanken-grotesk text-on-surface z-10">Sushi</span>
-                  <span className="font-jetbrains-mono text-secondary z-10">23%</span>
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>

@@ -104,11 +104,24 @@ body {
 }
 
 /* Float animation for hero card */
-@keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
+@keyframes float-silk {
+  0%, 100% {
+    transform: translateY(0px) scale(1);
+  }
+
+  33% {
+    transform: translateY(-8px) scale(1.01);
+  }
+
+  66% {
+    transform: translateY(-14px) scale(1);
+  }
 }
-.animate-float { animation: float 4s ease-in-out infinite; }
+
+.animate-float-silk {
+  animation: float-silk 6s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+  will-change: transform;
+}
 
 /* Electric pulse for logo */
 @keyframes electric-pulse {
