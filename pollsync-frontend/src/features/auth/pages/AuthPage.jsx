@@ -82,14 +82,26 @@ export default function AuthPage() {
         
         {/* Header */}
         <div className="text-center mb-8">
-          <div className="flex items-center justify-center gap-2 mb-2 text-primary">
-            <span 
-              className="material-symbols-outlined text-4xl" 
-              style={{ fontVariationSettings: "'FILL' 1" }}
-            >
-              bolt
-            </span>
-            <h1 className="font-sora text-3xl font-bold">PollSync</h1>
+          <div className="flex justify-center mb-2">
+            <div className="relative flex items-center gap-2">
+              <div className="relative flex items-center justify-center">
+                <div className="absolute w-14 h-14 rounded-full bg-tertiary/20 animate-ping" />
+                <div className="absolute w-8 h-8 rounded-full bg-tertiary/10 blur-sm" />
+                <span
+                  className="material-symbols-outlined relative z-10 text-tertiary"
+                  style={{
+                    fontVariationSettings: "'FILL' 1",
+                    fontSize: '48px',
+                    animation: 'electric-pulse 2s ease-in-out infinite',
+                  }}
+                >
+                  bolt
+                </span>
+              </div>
+              <span className="font-sora font-bold text-xl text-primary">
+                PollSync
+              </span>
+            </div>
           </div>
           <p className="font-hanken-grotesk text-on-surface-variant text-sm">
             Real-time data, grounded in earth.

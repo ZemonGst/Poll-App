@@ -9,14 +9,26 @@ export default function Navbar() {
     <nav className="sticky top-0 z-50 h-16 glass-panel border-b border-outline-variant/20 flex items-center justify-between px-5 md:px-10">
       
       {/* Left: Brand */}
-      <Link to={isAuthenticated ? '/dashboard' : '/'} className="flex items-center gap-2 text-primary hover:text-primary-fixed transition-colors">
-        <span 
-          className="material-symbols-outlined text-3xl" 
-          style={{ fontVariationSettings: "'FILL' 1" }}
-        >
-          bolt
-        </span>
-        <span className="font-sora text-xl font-bold tracking-tight">PollSync</span>
+      <Link to={isAuthenticated ? '/dashboard' : '/'} className="hover:opacity-80 transition-opacity">
+        <div className="relative flex items-center gap-2">
+          <div className="relative flex items-center justify-center">
+            <div className="absolute w-8 h-8 rounded-full bg-tertiary/20 animate-ping" />
+            <div className="absolute w-8 h-8 rounded-full bg-tertiary/10 blur-sm" />
+            <span
+              className="material-symbols-outlined relative z-10 text-tertiary"
+              style={{
+                fontVariationSettings: "'FILL' 1",
+                fontSize: '24px',
+                animation: 'electric-pulse 2s ease-in-out infinite',
+              }}
+            >
+              bolt
+            </span>
+          </div>
+          <span className="font-sora font-bold text-xl text-primary">
+            PollSync
+          </span>
+        </div>
       </Link>
 
       {/* Right: Auth controls */}

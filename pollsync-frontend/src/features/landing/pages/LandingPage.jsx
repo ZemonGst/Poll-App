@@ -65,21 +65,25 @@ export default function LandingPage() {
       <nav className="sticky top-0 z-50 h-16 glass-panel border-b border-outline-variant/20 flex items-center justify-between px-5 md:px-10">
         <div className="flex items-center gap-2">
           {/* Pulsing Electric Flash Logo (Small) */}
-          <div className="relative flex items-center justify-center scale-75 transform origin-left">
-            <div className="absolute w-8 h-8 rounded-full bg-tertiary/20 animate-ping" />
-            <div className="absolute w-6 h-6 rounded-full bg-tertiary/10 blur-sm" />
-            <span
-              className="material-symbols-outlined relative z-10 text-tertiary text-2xl"
-              style={{
-                fontVariationSettings: "'FILL' 1",
-                filter: 'drop-shadow(0 0 8px #b7cf87) drop-shadow(0 0 20px #b7cf87)',
-                animation: 'electric-pulse 2s ease-in-out infinite',
-              }}
-            >
-              bolt
+          <div className="relative flex items-center gap-2">
+            <div className="relative flex items-center justify-center">
+              <div className="absolute w-8 h-8 rounded-full bg-tertiary/20 animate-ping" />
+              <div className="absolute w-8 h-8 rounded-full bg-tertiary/10 blur-sm" />
+              <span
+                className="material-symbols-outlined relative z-10 text-tertiary"
+                style={{
+                  fontVariationSettings: "'FILL' 1",
+                  fontSize: '24px',
+                  animation: 'electric-pulse 2s ease-in-out infinite',
+                }}
+              >
+                bolt
+              </span>
+            </div>
+            <span className="font-sora font-bold text-xl text-primary">
+              PollSync
             </span>
           </div>
-          <span className="font-sora text-xl font-bold tracking-tight text-[#dac2af]">PollSync</span>
         </div>
         <div className="flex items-center gap-4">
           <Button variant="ghost" onClick={() => navigate('/auth')} className="hidden sm:flex">
@@ -103,19 +107,26 @@ export default function LandingPage() {
         </div>
 
         {/* Large Pulsing Flash Logo */}
-        <div className="relative flex items-center justify-center mb-8">
-          <div className="absolute w-20 h-20 rounded-full bg-tertiary/20 animate-ping" />
-          <div className="absolute w-16 h-16 rounded-full bg-tertiary/10 blur-sm" />
-          <span
-            className="material-symbols-outlined relative z-10 text-tertiary text-[64px]"
-            style={{
-              fontVariationSettings: "'FILL' 1",
-              filter: 'drop-shadow(0 0 12px #b7cf87) drop-shadow(0 0 30px #b7cf87)',
-              animation: 'electric-pulse 2s ease-in-out infinite',
-            }}
-          >
-            bolt
-          </span>
+        <div className="flex justify-center mb-8">
+          <div className="relative flex items-center gap-2">
+            <div className="relative flex items-center justify-center">
+              <div className="absolute w-14 h-14 rounded-full bg-tertiary/20 animate-ping" />
+              <div className="absolute w-8 h-8 rounded-full bg-tertiary/10 blur-sm" />
+              <span
+                className="material-symbols-outlined relative z-10 text-tertiary"
+                style={{
+                  fontVariationSettings: "'FILL' 1",
+                  fontSize: '48px',
+                  animation: 'electric-pulse 2s ease-in-out infinite',
+                }}
+              >
+                bolt
+              </span>
+            </div>
+            <span className="font-sora font-bold text-xl text-primary">
+              PollSync
+            </span>
+          </div>
         </div>
 
         {/* Headlines */}
@@ -509,21 +520,24 @@ export default function LandingPage() {
       <footer className="w-full glass-panel border-t border-outline-variant/20 py-8 px-5 md:px-10 mt-auto relative z-10">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
           <div className="flex flex-col items-center md:items-start gap-2">
-            <div className="flex items-center gap-2">
-              <div className="relative flex items-center justify-center scale-75 transform origin-left">
+            <div className="relative flex items-center gap-2">
+              <div className="relative flex items-center justify-center">
                 <div className="absolute w-8 h-8 rounded-full bg-tertiary/20 animate-ping" />
+                <div className="absolute w-8 h-8 rounded-full bg-tertiary/10 blur-sm" />
                 <span
-                  className="material-symbols-outlined relative z-10 text-tertiary text-2xl"
+                  className="material-symbols-outlined relative z-10 text-tertiary"
                   style={{
                     fontVariationSettings: "'FILL' 1",
-                    filter: 'drop-shadow(0 0 8px #b7cf87)',
+                    fontSize: '24px',
                     animation: 'electric-pulse 2s ease-in-out infinite',
                   }}
                 >
                   bolt
                 </span>
               </div>
-              <span className="font-sora text-lg font-bold tracking-tight text-[#dac2af]">PollSync</span>
+              <span className="font-sora font-bold text-xl text-primary">
+                PollSync
+              </span>
             </div>
             <p className="text-sm text-on-surface-variant font-hanken-grotesk ml-8">Real-time data, grounded in earth.</p>
           </div>
