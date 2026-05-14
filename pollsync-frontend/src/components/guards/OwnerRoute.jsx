@@ -15,7 +15,7 @@ export default function OwnerRoute() {
   }
 
   if (!isAuthenticated) {
-    return <Navigate to="/" replace />;
+    return <Navigate to="/auth" replace />;
   }
 
   // Normalize IDs (handling both id and _id from MongoDB)

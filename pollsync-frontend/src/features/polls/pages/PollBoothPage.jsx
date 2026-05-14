@@ -108,7 +108,7 @@ export default function PollBoothPage() {
 
   const handleLoginRedirect = () => {
     localStorage.setItem('returnUrl', `/poll/${pollId}`);
-    navigate('/');
+    navigate('/auth');
   };
 
   if (!hasValidPollId) {
@@ -120,7 +120,7 @@ export default function PollBoothPage() {
             <p className="text-on-surface-variant mb-6">
               This poll link is missing a valid poll ID.
             </p>
-            <Button onClick={() => navigate('/')} variant="ghost">Go Home</Button>
+            <Button onClick={() => navigate('/auth')} variant="ghost">Go Home</Button>
           </Card>
         </div>
       </PageBackground>
@@ -142,7 +142,7 @@ export default function PollBoothPage() {
           <Card className="text-center p-8">
             <h2 className="text-xl text-error mb-4 font-sora">Error</h2>
             <p className="text-on-surface-variant mb-6">{error || 'Poll not found'}</p>
-            <Button onClick={() => navigate('/')} variant="ghost">Go Home</Button>
+            <Button onClick={() => navigate('/auth')} variant="ghost">Go Home</Button>
           </Card>
         </div>
       </PageBackground>

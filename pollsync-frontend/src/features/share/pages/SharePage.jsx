@@ -103,7 +103,7 @@ export default function SharePage() {
             <Button
               variant="brand"
               icon="home"
-              onClick={() => navigate('/', { replace: true })}
+              onClick={() => navigate('/auth', { replace: true })}
             >
               Go Home
             </Button>

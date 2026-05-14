@@ -35,6 +35,7 @@ function NavigationProgress() {
 }
 
 // Pages — lazy loaded
+const LandingPage      = lazy(() => import('../features/landing/pages/LandingPage'));
 const AuthPage         = lazy(() => import('../features/auth/pages/AuthPage'));
 const AuthCallbackPage = lazy(() => import('../features/auth/pages/AuthCallbackPage'));
 const DashboardPage    = lazy(() => import('../features/dashboard/pages/DashboardPage'));
@@ -53,7 +54,8 @@ export default function AppRouter() {
       <Suspense fallback={<Spinner variant="fullpage" />}>
         <Routes>
           {/* ── Public Routes ──────────────────────────────── */}
-          <Route path="/"                          element={<AuthPage />} />
+          <Route path="/"                          element={<LandingPage />} />
+          <Route path="/auth"                      element={<AuthPage />} />
           <Route path="/auth/callback"             element={<AuthCallbackPage />} />
           <Route path="/poll/:pollId"              element={<PollBoothPage />} />
           <Route path="/poll/:pollId/results"      element={<ResultsPage />} />

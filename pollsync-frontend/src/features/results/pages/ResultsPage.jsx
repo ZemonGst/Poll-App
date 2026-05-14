@@ -150,7 +150,7 @@ export default function ResultsPage() {
           <Card className="text-center p-8">
             <h2 className="text-xl text-error mb-4 font-sora">Error</h2>
             <p className="text-on-surface-variant mb-6">{error || 'Results not available'}</p>
-            <Button onClick={() => navigate('/')} variant="ghost">Go Home</Button>
+            <Button onClick={() => navigate('/auth')} variant="ghost">Go Home</Button>
           </Card>
         </div>
       </PageBackground>

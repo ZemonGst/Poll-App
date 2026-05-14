@@ -38,13 +38,13 @@ const AuthCallbackPage = () => {
         })
         .catch((error) => {
           console.error('Failed to fetch user after OAuth:', error);
-          navigate('/?error=session_failed', { replace: true });
+          navigate('/auth?error=session_failed', { replace: true });
         });
     } else {
 
       const error = searchParams.get('error');
       console.error('OAuth error from URL:', error);
-      navigate(`/?error=${error || 'oauth_failed'}`, { replace: true });
+      navigate(`/auth?error=${error || 'oauth_failed'}`, { replace: true });
     }
   }, [searchParams, navigate, dispatch]);
 
