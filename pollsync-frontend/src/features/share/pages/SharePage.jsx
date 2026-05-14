@@ -51,8 +51,10 @@ export default function SharePage() {
         const pollId = extractPollId(res);
         if (!pollId) throw new Error('Poll ID missing in response');
 
-        // Preserve return URL so that if the user goes through auth gate,
-        // they'll be redirected back to the poll after login
+    // Log the final link
+    console.log('Navigating to:', window.location.origin + '/poll/' + pollId);
+
+
         localStorage.setItem('returnUrl', `/poll/${pollId}`);
         navigate(`/poll/${pollId}`, { replace: true });
       } catch (err) {

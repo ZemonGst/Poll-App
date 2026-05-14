@@ -1,26 +1,77 @@
 import axios from 'axios';
-import { getToken, clearToken } from '../utils/storage';
+import { getToken } from '../utils/storage';
+
+/*
+|--------------------------------------------------------------------------
+| Environment-Aware Backend URL
+|--------------------------------------------------------------------------
+|
+| Development:
+|   http://localhost:8000
+|
+| Production:
+|   Uses Vercel environment variable
+|
+*/
+
+const API_BASE_URL =
+  import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+
+/*
+|--------------------------------------------------------------------------
+| Debug Logs
+|--------------------------------------------------------------------------
+|
+| Remove later after deployment testing
+|
+*/
+
+console.log('ENV MODE:', import.meta.env.MODE);
+console.log('API BASE URL:', API_BASE_URL);
+
+/*
+|--------------------------------------------------------------------------
+| Axios Instance
+|--------------------------------------------------------------------------
+*/
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000',
+  baseURL: API_BASE_URL,
   withCredentials: true,
 });
 
-// Inject JWT on every request
+/*
+|--------------------------------------------------------------------------
+| Inject JWT Token
+|--------------------------------------------------------------------------
+*/
+
 api.interceptors.request.use((config) => {
   const token = getToken();
-  if (token) config.headers.Authorization = `Bearer ${token}`;
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+
   return config;
 });
 
-// Global error handling
+/*
+|--------------------------------------------------------------------------
+| Global Response Error Handling
+|--------------------------------------------------------------------------
+*/
+
 api.interceptors.response.use(
-  (res) => res,
+  (response) => response,
+
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('token');
+
       window.location.href = '/';
     }
+
     return Promise.reject(error);
   }
 );

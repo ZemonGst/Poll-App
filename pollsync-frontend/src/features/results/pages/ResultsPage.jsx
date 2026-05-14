@@ -101,7 +101,6 @@ export default function ResultsPage() {
     socket.on(SOCKET_EVENTS.LEADERBOARD_UPDATE, handleLeaderboardUpdate);
     socket.on(SOCKET_EVENTS.ANALYTICS_UPDATE, handleAnalyticsUpdate);
 
-    // Also listen to VOTE_UPDATE just in case backend uses it for results updates
     const handleVoteUpdate = (data) => {
       if (data && (data.id === pollId || data.pollId === pollId || data._id === pollId)) {
         dispatch(updateResultsData(data.poll || data));

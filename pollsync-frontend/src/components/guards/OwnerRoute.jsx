@@ -6,10 +6,8 @@ import Spinner from '../ui/Spinner';
 
 export default function OwnerRoute() {
   const { isAuthenticated, isLoading: isAuthLoading, user } = useAuth();
-  // Read poll state
   const { currentPoll, isLoading: isPollLoading } = useSelector((state) => state.poll || {});
 
-  // Wait if either auth or poll is loading
   if (isAuthLoading || isPollLoading) {
     return <Spinner variant="fullpage" />;
   }
@@ -18,12 +16,10 @@ export default function OwnerRoute() {
     return <Navigate to="/auth" replace />;
   }
 
-  // Normalize IDs (handling both id and _id from MongoDB)
+
   const currentUserId = user?.id || user?._id;
   const pollOwnerId = currentPoll?.createdBy?.id || currentPoll?.createdBy?._id || currentPoll?.createdBy;
 
-  // Check if currentPoll exists and createdBy matches user.id
-  // We only show Access Denied if the poll is loaded and IDs don't match
   if (currentPoll && pollOwnerId && pollOwnerId !== currentUserId) {
     return (
       <div className="flex items-center justify-center min-h-[50vh]">

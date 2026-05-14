@@ -6,7 +6,7 @@ export const fetchResults = createAsyncThunk(
   async (pollId, { rejectWithValue }) => {
     try {
       const res = await getPollResults(pollId);
-      return res.data; // assuming API returns { success, data: ... }
+      return res.data; 
     } catch (err) {
       return rejectWithValue(err.response?.data?.message || 'Failed to fetch results');
     }
@@ -24,10 +24,9 @@ const resultsSlice = createSlice({
   initialState,
   reducers: {
     updateResultsData: (state, action) => {
-      // Handles the RESULTS_UPDATE socket event
+
       if (state.data) {
-        // Merge the incoming update with the current state data
-        // Assume action.payload has { totalVotes, options, etc. }
+
         state.data = {
           ...state.data,
           ...action.payload,

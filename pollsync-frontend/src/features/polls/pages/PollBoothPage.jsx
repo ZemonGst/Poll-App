@@ -78,7 +78,6 @@ export default function PollBoothPage() {
     };
   }, [pollId, navigate, hasValidPollId, isAuthenticated, isAnonymousMode]);
 
-  // ✅ MUST be before any conditional return — guards internally
   useEffect(() => {
     if (activePoll && activePoll.status === 'ended') {
       navigate(`/poll/${pollId}/results`, { replace: true });
@@ -91,7 +90,6 @@ export default function PollBoothPage() {
     setIsSubmitting(true);
     setSelectedOptions([optionId]);
     
-    // Backend voteController expects { optionId: string }
     const dto = { optionId };
       
     const res = await dispatch(submitVoteThunk({
@@ -221,7 +219,6 @@ export default function PollBoothPage() {
         {hasVoted ? (
           <div className="max-w-md mx-auto">
             <Card className="p-10 text-center flex flex-col items-center gap-6 overflow-hidden relative">
-              {/* Decorative background pulse */}
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-tertiary/10 blur-3xl rounded-full -translate-y-1/2" />
               
               <div className="relative">
