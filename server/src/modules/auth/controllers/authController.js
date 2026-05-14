@@ -8,6 +8,7 @@ import {
   createAuthResponse,
   logoutUserService
 } from "../services/authService.js";
+import generateToken from "../../../common/utils/generateToken.js";
 
 export const registerLocalUser = asyncHandler(async (req, res) => {
   const user = await registerUserService(req.body);
@@ -45,17 +46,10 @@ export const getMe = asyncHandler(async (req, res) => {
   );
 });
 
-export const googleAuthSuccess = asyncHandler(async (req, res) => {
-  const authData = createAuthResponse(req.user);
-
-  return res.status(200).json(
-    new ApiResponse(
-      200,
-      "Google login successful",
-      authData
-    )
-  );
-});
+export const googleAuthSuccess = (req, res) => {
+  const token = generateToken({ id: req.user._id });
+  res.redirect('http://localhost:5173/auth/callback?token=' + token);
+};
 
 export const logoutUser =  asyncHandler(async (req, res) => { await logoutUserService();
    return res.status(200).json(

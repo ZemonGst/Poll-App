@@ -11,7 +11,12 @@ import {
 
 import {
   emitAnalyticsUpdate,
+  emitLeaderboardUpdate,
 } from "../../../realtime/handlers/analyticsRealtime.handler.js";
+
+import {
+  getPollLeaderboardService,
+} from "../../leaderboard/services/pollLeaderboardService.js";
 
 import NotFoundError
   from "../../../../common/errors/NotFoundError.js";
@@ -147,6 +152,21 @@ export const votePollService = async (
           .uniqueParticipants,
     },
   });
+
+  if (poll.showLeaderboard) {
+
+    const leaderboardData =
+      await getPollLeaderboardService(
+        poll._id
+      );
+
+    emitLeaderboardUpdate({
+
+      pollId: poll._id,
+
+      leaderboardData,
+    });
+  }
 
   return pollDto(poll);
 };

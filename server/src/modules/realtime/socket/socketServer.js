@@ -13,13 +13,25 @@ export const initializeSocketServer =
     io = new Server(httpServer, {
 
       cors: {
-        origin: "*",
+        origin:
+          process.env.CLIENT_URL,
+
+        methods: [
+          "GET",
+          "POST",
+        ],
+
+        credentials: true,
       },
     });
 
     io.on(
       "connection",
       (socket) => {
+
+        console.log(
+          `Socket connected: ${socket.id}`
+        );
 
         registerSocketEvents(
           io,

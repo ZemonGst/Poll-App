@@ -279,5 +279,12 @@ export const endPollService = async (
 
   await poll.save();
 
+  emitPollEnded({
+
+    pollId: poll._id,
+
+    poll,
+  });
+
   return pollDto(poll);
 };

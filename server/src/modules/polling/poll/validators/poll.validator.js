@@ -5,7 +5,8 @@ export const createPollSchema =   Joi.object({
     title: Joi.string()
       .trim()
       .min(3)
-      .max(200),
+      .max(200)
+      .required(),
 
     description: Joi.string()
       .trim()
@@ -20,10 +21,12 @@ export const createPollSchema =   Joi.object({
           text: Joi.string()
             .trim()
             .min(1)
-            .max(200),
+            .max(200)
+            .required(),
         })
       )
-      .min(2),
+      .min(2)
+      .required(),
 
     visibility: Joi.string()
       .valid(
