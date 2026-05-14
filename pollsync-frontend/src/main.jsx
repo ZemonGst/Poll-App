@@ -12,7 +12,20 @@ import { getToken } from './utils/storage'
 NProgress.configure({ showSpinner: false });
 NProgress.start();
 
-document.documentElement.classList.add('dark');
+const initialTheme = localStorage.getItem('theme') || 'dark';
+document.documentElement.classList.add(initialTheme);
+
+store.subscribe(() => {
+  const state = store.getState();
+  const theme = state.theme?.theme || 'dark';
+  if (theme === 'dark') {
+    document.documentElement.classList.remove('light');
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+    document.documentElement.classList.add('light');
+  }
+});
 
 if (getToken()) {
   store.dispatch(getMeThunk()).finally(() => {

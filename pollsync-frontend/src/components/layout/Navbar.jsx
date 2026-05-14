@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
+import ThemeToggle from '../ui/ThemeToggle';
 
 export default function Navbar() {
   const { isAuthenticated, user, logout } = useAuth();
@@ -44,6 +45,8 @@ export default function Navbar() {
           <div className="h-6 w-px bg-outline-variant/30 hidden sm:block"></div>
           
           <div className="flex items-center gap-4">
+            <ThemeToggle />
+            
             {user?.name && (
               <div className="w-8 h-8 rounded-full bg-primary-container text-primary flex items-center justify-center font-sora font-semibold text-sm border border-primary/20">
                 {user.name.charAt(0).toUpperCase()}

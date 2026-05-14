@@ -5,6 +5,7 @@ import pollReducer from '../features/polls/pollSlice';
 import resultsReducer from '../features/results/resultsSlice';
 import analyticsReducer from '../features/analytics/analyticsSlice';
 import leaderboardReducer from '../features/leaderboard/leaderboardSlice';
+import themeReducer from '../store/themeSlice';
 
 const rootReducer = combineReducers({
   auth: authReducer,
@@ -13,6 +14,7 @@ const rootReducer = combineReducers({
   results: resultsReducer,
   analytics: analyticsReducer,
   leaderboard: leaderboardReducer,
+  theme: themeReducer,
 });
 
 export default rootReducer;
