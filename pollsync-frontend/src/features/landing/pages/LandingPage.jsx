@@ -491,14 +491,14 @@ export default function LandingPage() {
           <div>
             <div className="flex items-center justify-center gap-2 mb-2">
               <span className="material-symbols-outlined text-tertiary">bolt</span>
-              <span className="font-sora text-4xl md:text-5xl font-bold text-primary" style={{ textShadow: '0 0 15px rgba(218,194,175,0.3)' }}>10K+</span>
+              <span className="font-sora text-4xl md:text-5xl font-bold text-primary" style={{ textShadow: '0 0 15px rgba(218,194,175,0.3)' }}>1K+</span>
             </div>
             <p className="font-jetbrains-mono text-[10px] uppercase tracking-wider text-on-surface-variant">Polls Created</p>
           </div>
           <div>
             <div className="flex items-center justify-center gap-2 mb-2">
               <span className="material-symbols-outlined text-primary">bar_chart</span>
-              <span className="font-sora text-4xl md:text-5xl font-bold text-primary" style={{ textShadow: '0 0 15px rgba(218,194,175,0.3)' }}>50K+</span>
+              <span className="font-sora text-4xl md:text-5xl font-bold text-primary" style={{ textShadow: '0 0 15px rgba(218,194,175,0.3)' }}>1K+</span>
             </div>
             <p className="font-jetbrains-mono text-[10px] uppercase tracking-wider text-on-surface-variant">Votes Cast</p>
           </div>
@@ -573,7 +573,7 @@ export default function LandingPage() {
         </div>
         
         <div className="max-w-7xl mx-auto mt-8 pt-6 border-t border-outline-variant/10 text-center text-xs text-on-surface-variant/70 font-hanken-grotesk">
-          © 2026 PollSync. Built for realtime engagement.
+          © 2026 PollSync. Built by Soumyaditya Sinha.
         </div>
       </footer>
     </div>
