@@ -25,6 +25,7 @@ const app = express();
 const allowedOrigins = [
 "http://localhost:5173",
 "https://pollsync-vert.vercel.app",
+"https://pollsync.soumyaditya.in",
 ];
 
 const isVercelPreview =
