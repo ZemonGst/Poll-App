@@ -40,28 +40,29 @@ export default function PollBoothPage() {
     };
   }, [dispatch, pollId, hasValidPollId]);
 
+  // Connect to socket and join the poll room immediately on page load.
+  // This must NOT be gated on isAuthenticated/isAnonymousMode — if the socket
+  // only connects after the auth gate is dismissed, the JOIN_POLL emit fires
+  // after the vote API call in some cases, meaning the listener is registered
+  // too late and the first vote-update event is missed.
   useEffect(() => {
-    // Only connect if we have a valid poll ID AND the user has selected a participant mode
-    // (either authenticated or anonymous mode active)
-    if (!hasValidPollId || (!isAuthenticated && !isAnonymousMode)) return undefined;
+    if (!hasValidPollId) return undefined;
 
     const socket = getSocket();
-    
-    // Auto connect if not connected
+
     if (!socket.connected) {
       socket.connect();
     }
-    
+
     socket.emit(SOCKET_EVENTS.JOIN_POLL, { pollId });
-    
+
     const handleVoteUpdate = (data) => {
+      // data.id is now always a string (fixed in pollRealtimeDto)
       if (data && data.id === pollId) {
         setLivePoll(data);
-      } else if (data && data.pollId === pollId && data.poll) {
-        setLivePoll(data.poll);
       }
     };
-    
+
     const handlePollEnded = (data) => {
       if (data && (data.id === pollId || data.pollId === pollId)) {
         navigate(`/poll/${pollId}/results`);
@@ -70,13 +71,13 @@ export default function PollBoothPage() {
 
     socket.on(SOCKET_EVENTS.VOTE_UPDATE, handleVoteUpdate);
     socket.on(SOCKET_EVENTS.POLL_ENDED, handlePollEnded);
-    
+
     return () => {
       socket.emit(SOCKET_EVENTS.LEAVE_POLL, { pollId });
       socket.off(SOCKET_EVENTS.VOTE_UPDATE, handleVoteUpdate);
       socket.off(SOCKET_EVENTS.POLL_ENDED, handlePollEnded);
     };
-  }, [pollId, navigate, hasValidPollId, isAuthenticated, isAnonymousMode]);
+  }, [pollId, navigate, hasValidPollId]);
 
   useEffect(() => {
     if (activePoll && activePoll.status === 'ended') {
@@ -215,33 +216,48 @@ export default function PollBoothPage() {
           </p>
         )}
 
-        {/* Voted View */}
+        {/* Voted View — shows live results so the voter can watch updates in real-time */}
         {hasVoted ? (
-          <div className="max-w-md mx-auto">
-            <Card className="p-10 text-center flex flex-col items-center gap-6 overflow-hidden relative">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-32 bg-tertiary/10 blur-3xl rounded-full -translate-y-1/2" />
-              
+          <div className="flex flex-col gap-6">
+            <Card className="p-6 text-center flex items-center justify-center gap-3">
               <div className="relative">
                 <div className="absolute inset-0 bg-tertiary/20 blur-xl rounded-full animate-pulse" />
-                <span className="material-symbols-outlined text-6xl text-tertiary relative z-10" style={{ fontVariationSettings: "'FILL' 1" }}>
+                <span className="material-symbols-outlined text-3xl text-tertiary relative z-10" style={{ fontVariationSettings: "'FILL' 1" }}>
                   check_circle
                 </span>
               </div>
-              
-              <div className="space-y-3 relative z-10">
-                <h2 className="text-2xl font-sora text-on-surface">Your vote was counted!</h2>
-                <p className="text-on-surface-variant font-hanken-grotesk">
-                  Waiting for poll to end...
-                </p>
+              <div>
+                <p className="font-sora text-on-surface font-semibold">Your vote was counted!</p>
+                <p className="text-on-surface-variant text-sm font-hanken-grotesk">Live results updating below</p>
               </div>
-
-              {/* Subtle animated indicator */}
-              <div className="flex gap-1.5 mt-2 relative z-10">
-                <div className="w-2 h-2 rounded-full bg-tertiary/40 animate-bounce" style={{ animationDelay: '0ms' }} />
-                <div className="w-2 h-2 rounded-full bg-tertiary/60 animate-bounce" style={{ animationDelay: '150ms' }} />
-                <div className="w-2 h-2 rounded-full bg-tertiary animate-bounce" style={{ animationDelay: '300ms' }} />
+              <div className="flex gap-1 ml-2">
+                <div className="w-1.5 h-1.5 rounded-full bg-tertiary/40 animate-bounce" style={{ animationDelay: '0ms' }} />
+                <div className="w-1.5 h-1.5 rounded-full bg-tertiary/60 animate-bounce" style={{ animationDelay: '150ms' }} />
+                <div className="w-1.5 h-1.5 rounded-full bg-tertiary animate-bounce" style={{ animationDelay: '300ms' }} />
               </div>
             </Card>
+
+            {/* Live vote bars */}
+            <div className="flex flex-col gap-4">
+              {activePoll.options.map((opt) => {
+                const totalVotes = activePoll.totalVotes || 0;
+                const pct = totalVotes > 0 ? Math.round((opt.voteCount / totalVotes) * 100) : 0;
+                return (
+                  <Card key={opt.id || opt._id} className="p-5">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="font-hanken-grotesk text-on-surface">{opt.text}</span>
+                      <span className="font-jetbrains-mono text-xs text-on-surface-variant">{opt.voteCount} votes · {pct}%</span>
+                    </div>
+                    <div className="h-2 rounded-full bg-surface-container-high overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-primary transition-all duration-500"
+                        style={{ width: `${pct}%` }}
+                      />
+                    </div>
+                  </Card>
+                );
+              })}
+            </div>
           </div>
         ) : (
           /* Voting View */

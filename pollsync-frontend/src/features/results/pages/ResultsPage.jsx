@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchResults, updateResultsData, clearResults } from '../resultsSlice';
 import { fetchLeaderboard, updateLeaderboardData, clearLeaderboard } from '../../leaderboard/leaderboardSlice';
@@ -72,9 +72,12 @@ export default function ResultsPage() {
     }
     socket.emit(SOCKET_EVENTS.JOIN_POLL, { pollId });
 
-    const handleResultsUpdate = (data) => {
-      if (data && (data.id === pollId || data.pollId === pollId || data._id === pollId)) {
-        dispatch(updateResultsData(data.poll || data));
+    // The server emits "vote-update" (from voteService) on every new vote.
+    // There is no "results-update" event — that listener was dead code.
+    const handleVoteUpdate = (data) => {
+      // data.id is a string (fixed in pollRealtimeDto), pollId from useParams is also a string.
+      if (data && data.id === pollId) {
+        dispatch(updateResultsData(data));
       }
     };
 
@@ -96,23 +99,15 @@ export default function ResultsPage() {
       }
     };
 
-    socket.on(SOCKET_EVENTS.RESULTS_UPDATE, handleResultsUpdate);
+    socket.on(SOCKET_EVENTS.VOTE_UPDATE, handleVoteUpdate);
     socket.on(SOCKET_EVENTS.POLL_ENDED, handlePollEnded);
     socket.on(SOCKET_EVENTS.LEADERBOARD_UPDATE, handleLeaderboardUpdate);
     socket.on(SOCKET_EVENTS.ANALYTICS_UPDATE, handleAnalyticsUpdate);
 
-    const handleVoteUpdate = (data) => {
-      if (data && (data.id === pollId || data.pollId === pollId || data._id === pollId)) {
-        dispatch(updateResultsData(data.poll || data));
-      }
-    };
-    socket.on(SOCKET_EVENTS.VOTE_UPDATE, handleVoteUpdate);
-
     return () => {
       socket.emit(SOCKET_EVENTS.LEAVE_POLL, { pollId });
-      socket.off(SOCKET_EVENTS.RESULTS_UPDATE, handleResultsUpdate);
-      socket.off(SOCKET_EVENTS.POLL_ENDED, handlePollEnded);
       socket.off(SOCKET_EVENTS.VOTE_UPDATE, handleVoteUpdate);
+      socket.off(SOCKET_EVENTS.POLL_ENDED, handlePollEnded);
       socket.off(SOCKET_EVENTS.LEADERBOARD_UPDATE, handleLeaderboardUpdate);
       socket.off(SOCKET_EVENTS.ANALYTICS_UPDATE, handleAnalyticsUpdate);
     };
@@ -164,6 +159,36 @@ export default function ResultsPage() {
 
   return (
     <PageBackground>
+      {/* Top nav bar with logo + dashboard link */}
+      <div className="sticky top-0 z-50 h-14 glass-panel border-b border-outline-variant/20 flex items-center justify-between px-5 md:px-10">
+        {/* Logo */}
+        <Link to="/dashboard" className="hover:opacity-80 transition-opacity">
+          <div className="flex items-center gap-2">
+            <div className="relative flex items-center justify-center">
+              <div className="absolute w-7 h-7 rounded-full bg-tertiary/20 animate-ping" />
+              <div className="absolute w-7 h-7 rounded-full bg-tertiary/10 blur-sm" />
+              <span
+                className="material-symbols-outlined relative z-10 text-tertiary"
+                style={{ fontVariationSettings: "'FILL' 1", fontSize: '22px' }}
+              >
+                bolt
+              </span>
+            </div>
+            <span className="font-sora font-bold text-lg text-primary">PollSync</span>
+          </div>
+        </Link>
+
+        {/* Return button */}
+        <Button
+          onClick={() => navigate('/dashboard')}
+          variant="ghost"
+          size="sm"
+          icon="arrow_back"
+        >
+          Return to Dashboard
+        </Button>
+      </div>
+
       <div className="max-w-3xl mx-auto pt-10 pb-20 px-5 md:px-10">
         {/* Top Section */}
         <div className="text-center mb-10">
